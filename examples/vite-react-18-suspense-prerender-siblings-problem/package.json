@@ -21,7 +21,7 @@
     "@suspensive/tsconfig": "workspace:*",
     "@types/react": "catalog:react18",
     "@types/react-dom": "catalog:react18",
-    "@vitejs/plugin-react": "^4.3.2",
+    "@vitejs/plugin-react": "^4.3.4",
     "globals": "^15.10.0"
   }
 }
