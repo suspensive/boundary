@@ -376,6 +376,14 @@ describe('useErrorBoundary', () => {
     ).toBeInTheDocument()
     expect(() =>
       render(
+        createElement(() => {
+          useErrorBoundary()
+          return <></>
+        })
+      )
+    ).toThrow(SuspensiveError)
+    expect(() =>
+      render(
         <ErrorBoundary
           fallback={() => {
             useErrorBoundary()
@@ -423,9 +431,15 @@ describe('useErrorBoundaryFallbackProps', () => {
   })
 
   it('should guarantee hook calling position is in fallback of ErrorBoundary', () => {
+    const inFallback = vi.fn()
     expect(() =>
       render(
-        <ErrorBoundary fallback={(props) => <>{props.error.message}</>}>
+        <ErrorBoundary
+          fallback={(props) => {
+            inFallback()
+            return <>{props.error.message}</>
+          }}
+        >
           {createElement(() => {
             useErrorBoundaryFallbackProps()
             return <></>
@@ -433,6 +447,7 @@ describe('useErrorBoundaryFallbackProps', () => {
         </ErrorBoundary>
       )
     ).toThrow(SuspensiveError)
+    expect(inFallback).toHaveBeenCalledTimes(0)
   })
   it('should be prevented to be called outside fallback of ErrorBoundary', () => {
     expect(() =>
@@ -445,9 +460,15 @@ describe('useErrorBoundaryFallbackProps', () => {
     ).toThrow(SuspensiveError)
   })
   it("should be prevented to be called in children of ErrorBoundary (ErrorBoundary shouldn't catch SuspensiveError)", () => {
+    const inFallback = vi.fn()
     expect(() =>
       render(
-        <ErrorBoundary fallback={(props) => <>{props.error.message}</>}>
+        <ErrorBoundary
+          fallback={(props) => {
+            inFallback()
+            return <>{props.error.message}</>
+          }}
+        >
           {createElement(() => {
             useErrorBoundaryFallbackProps()
             return <></>
@@ -455,5 +476,6 @@ describe('useErrorBoundaryFallbackProps', () => {
         </ErrorBoundary>
       )
     ).toThrow(SuspensiveError)
+    expect(inFallback).toHaveBeenCalledTimes(0)
   })
 })
