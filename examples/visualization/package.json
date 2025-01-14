@@ -22,6 +22,7 @@
     "next": "catalog:",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
+    "react-error-boundary": "^5.0.0",
     "sharp": "catalog:",
     "zod": "^3.24.1"
   },
