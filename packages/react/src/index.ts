@@ -1,11 +1,9 @@
-export { SuspensiveProvider, Suspensive } from './Suspensive'
 export { DefaultPropsProvider, DefaultProps } from './DefaultProps'
 export { Suspense } from './Suspense'
 export { ErrorBoundary, useErrorBoundary, useErrorBoundaryFallbackProps } from './ErrorBoundary'
 export { ErrorBoundaryGroup, useErrorBoundaryGroup } from './ErrorBoundaryGroup'
 export { Delay } from './Delay'
 export { wrap } from './wrap'
-export { DevMode } from './DevMode'
 export { ClientOnly } from './ClientOnly'
 
 export type { SuspenseProps } from './Suspense'

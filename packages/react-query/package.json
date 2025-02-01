@@ -63,21 +63,14 @@
   },
   "devDependencies": {
     "@suspensive/eslint-config": "workspace:*",
-    "@suspensive/react": "workspace:*",
     "@suspensive/tsconfig": "workspace:*",
     "@suspensive/tsup": "workspace:*",
     "@types/react": "catalog:react19",
     "react": "catalog:react19"
   },
   "peerDependencies": {
-    "@suspensive/react": "workspace:^2.18.12",
     "@tanstack/react-query": "^4 || ^5",
     "react": "^18 || ^19"
-  },
-  "peerDependenciesMeta": {
-    "@suspensive/react": {
-      "optional": true
-    }
   },
   "publishConfig": {
     "access": "public"

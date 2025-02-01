@@ -12,7 +12,6 @@ import {
   useRef,
   useState,
 } from 'react'
-import type { PropsWithDevMode } from './DevMode'
 import { ErrorBoundaryGroupContext } from './ErrorBoundaryGroup'
 import {
   Message_useErrorBoundaryFallbackProps_this_hook_should_be_called_in_ErrorBoundary_props_fallback,
@@ -45,51 +44,29 @@ const checkErrorBoundary = (shouldCatch: ShouldCatch, error: Error) => {
   return (shouldCatch as ShouldCatchCallback)(error)
 }
 
-export type ErrorBoundaryProps = PropsWithDevMode<
-  PropsWithChildren<{
-    /**
-     * an array of elements for the ErrorBoundary to check each render. If any of those elements change between renders, then the ErrorBoundary will reset the state which will re-render the children
-     */
-    resetKeys?: unknown[]
-    /**
-     * when ErrorBoundary is reset by resetKeys or fallback's props.reset, onReset will be triggered
-     */
-    onReset?(): void
-    /**
-     * when ErrorBoundary catch error, onError will be triggered
-     */
-    onError?(error: Error, info: ErrorInfo): void
-    /**
-     * when ErrorBoundary catch error, fallback will be render instead of children
-     */
-    fallback: ReactNode | FunctionComponent<ErrorBoundaryFallbackProps>
-    /**
-     * determines whether the ErrorBoundary should catch errors based on conditions
-     * @default true
-     */
-    shouldCatch?: ShouldCatch | [ShouldCatch, ...ShouldCatch[]]
-  }>,
-  {
-    /**
-     * @deprecated Use official react devtools instead
-     * @see https://react.dev/learn/react-developer-tools
-     */
-    showFallback?:
-      | boolean
-      | {
-          /**
-           * @deprecated Use official react devtools instead
-           * @see https://react.dev/learn/react-developer-tools
-           */
-          errorMessage?: string
-          /**
-           * @deprecated Use official react devtools instead
-           * @see https://react.dev/learn/react-developer-tools
-           */
-          after?: number
-        }
-  }
->
+export type ErrorBoundaryProps = PropsWithChildren<{
+  /**
+   * an array of elements for the ErrorBoundary to check each render. If any of those elements change between renders, then the ErrorBoundary will reset the state which will re-render the children
+   */
+  resetKeys?: unknown[]
+  /**
+   * when ErrorBoundary is reset by resetKeys or fallback's props.reset, onReset will be triggered
+   */
+  onReset?(): void
+  /**
+   * when ErrorBoundary catch error, onError will be triggered
+   */
+  onError?(error: Error, info: ErrorInfo): void
+  /**
+   * when ErrorBoundary catch error, fallback will be render instead of children
+   */
+  fallback: ReactNode | FunctionComponent<ErrorBoundaryFallbackProps>
+  /**
+   * determines whether the ErrorBoundary should catch errors based on conditions
+   * @default true
+   */
+  shouldCatch?: ShouldCatch | [ShouldCatch, ...ShouldCatch[]]
+}>
 
 type ErrorBoundaryState<TError extends Error = Error> =
   | { isError: true; error: TError }
@@ -133,6 +110,9 @@ class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState
       if (error instanceof SuspensiveError) {
         throw error
       }
+      if (error instanceof ErrorInFallback) {
+        throw error.originalError
+      }
       const isCatch = Array.isArray(shouldCatch)
         ? shouldCatch.some((shouldCatch) => checkErrorBoundary(shouldCatch, error))
         : checkErrorBoundary(shouldCatch, error)
@@ -147,19 +127,33 @@ class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState
         throw error
       }
 
-      if (typeof fallback === 'function') {
-        const FallbackComponent = fallback
-        childrenOrFallback = <FallbackComponent error={error} reset={this.reset} />
-      } else {
-        childrenOrFallback = fallback
-      }
+      const Fallback = fallback
+      childrenOrFallback = (
+        <FallbackBoundary>
+          {typeof Fallback === 'function' ? <Fallback error={error} reset={this.reset} /> : Fallback}
+        </FallbackBoundary>
+      )
     }
 
     return (
-      <ErrorBoundaryContext.Provider value={{ ...this.state, reset: this.reset }}>
-        {childrenOrFallback}
-      </ErrorBoundaryContext.Provider>
+      <ErrorBoundaryContext value={{ ...this.state, reset: this.reset }}>{childrenOrFallback}</ErrorBoundaryContext>
     )
+  }
+}
+
+class ErrorInFallback extends Error {
+  originalError: Error
+  constructor(originalError: Error) {
+    super()
+    this.originalError = originalError
+  }
+}
+class FallbackBoundary extends Component<{ children: ReactNode }> {
+  componentDidCatch(originalError: Error) {
+    throw originalError instanceof SuspensiveError ? originalError : new ErrorInFallback(originalError)
+  }
+  render() {
+    return this.props.children
   }
 }
 

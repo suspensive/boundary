@@ -1,0 +1,23 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "@suspensive/eslint-config": "0.0.0",
+    "@suspensive/tsconfig": "0.0.0-development",
+    "@suspensive/tsup": "0.0.0",
+    "@suspensive/suspensive.org": "0.0.0",
+    "@suspensive/next-streaming-react-query": "0.0.0",
+    "@suspensive/react-native-playground": "0.0.0",
+    "@suspensive/visualization": "0.0.0",
+    "@suspensive/vite-react-18-suspense-prerender-siblings-problem": "0.0.0",
+    "@suspensive/codemods": "0.2.0",
+    "@suspensive/jotai": "2.18.12",
+    "@suspensive/react": "2.18.12",
+    "@suspensive/react-dom": "0.2.1",
+    "@suspensive/react-native": "0.0.17",
+    "@suspensive/react-query": "2.18.12",
+    "@suspensive/react-query-4": "2.18.12",
+    "@suspensive/react-query-5": "2.18.12"
+  },
+  "changesets": []
+}
