@@ -65,7 +65,7 @@
     "packlint": "^0.2.4",
     "playwright": "^1.49.1",
     "prettier": "^3.4.2",
-    "publint": "^0.2.12",
+    "publint": "^0.3.2",
     "rimraf": "^6.0.1",
     "sherif": "^1.1.1",
     "tsup": "^8.3.5",
