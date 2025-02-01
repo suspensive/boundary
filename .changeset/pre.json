@@ -19,5 +19,8 @@
     "@suspensive/react-query-4": "2.18.12",
     "@suspensive/react-query-5": "2.18.12"
   },
-  "changesets": []
+  "changesets": [
+    "fresh-comics-whisper",
+    "pretty-brooms-float"
+  ]
 }

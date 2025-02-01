@@ -1,6 +1,6 @@
 {
   "name": "@suspensive/jotai",
-  "version": "2.18.12",
+  "version": "3.0.0-next.0",
   "description": "Suspensive interfaces for jotai",
   "keywords": [
     "suspensive",
