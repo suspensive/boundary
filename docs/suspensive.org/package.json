@@ -22,7 +22,7 @@
     "start": "next start -p 4000"
   },
   "dependencies": {
-    "@codesandbox/sandpack-react": "^2.19.10",
+    "@codesandbox/sandpack-react": "^2.19.11",
     "@next/third-parties": "^15.1.6",
     "@suspensive/react": "workspace:*",
     "@suspensive/react-query-4": "workspace:*",
